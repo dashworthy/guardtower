@@ -1,0 +1,15 @@
+schema_version: "1.1"
+name: cr-relevance-skip
+description: On a comments/docs-only change, guardtower's facets must self-skip and report no material code defect rather than manufacturing findings from prose.
+tags: [guardtower, mechanics, relevance, php]
+runs: 3
+execution:
+  max_turns: 40
+  timeout_seconds: 1200
+  allowed_tools: [Read, Glob, Grep, Skill, Agent, TodoWrite, Write, Edit]
+  prompt: |
+    This repo has an uncommitted change (CHANGE.diff; changed files under src/
+    and docs/). Please run a thorough (guardtower) review of the change before
+    I commit it. Report what you find; don't change any code.
+context:
+  scaffold_script: scaffold.sh

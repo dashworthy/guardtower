@@ -1,0 +1,16 @@
+schema_version: "1.1"
+name: cr-tenant-isolation-leak
+description: guardtower must catch a cross-tenant leak — a new query in a multi-tenant repo that dropped its tenant_id scope.
+tags: [guardtower, tenant-isolation, php]
+runs: 3
+execution:
+  max_turns: 40
+  timeout_seconds: 1200
+  allowed_tools: [Read, Glob, Grep, Skill, Agent, TodoWrite, Write, Edit]
+  prompt: |
+    This repo has an uncommitted change adding a customer-lookup-by-email
+    method to the billing repository (CHANGE.diff; changed files under src/).
+    Please run a thorough (guardtower) review of the change before I commit it.
+    Report what you find; don't change any code.
+context:
+  scaffold_script: scaffold.sh

@@ -1,0 +1,16 @@
+schema_version: "1.1"
+name: cr-numeric-precision-money
+description: guardtower must catch money handled as floating point — a precision/rounding defect introduced by the change.
+tags: [guardtower, numeric-precision, python]
+runs: 3
+execution:
+  max_turns: 40
+  timeout_seconds: 1200
+  allowed_tools: [Read, Glob, Grep, Skill, Agent, TodoWrite, Write, Edit]
+  prompt: |
+    This repo has an uncommitted change adding an order-total calculation
+    (CHANGE.diff; changed files under src/). Please run a thorough (guardtower)
+    review of the change before I commit it. Report what you find; don't change
+    any code.
+context:
+  scaffold_script: scaffold.sh

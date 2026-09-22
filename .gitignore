@@ -1,0 +1,3 @@
+# eval run artifacts (generated, not source)
+evals/results/
+eval-result.json
