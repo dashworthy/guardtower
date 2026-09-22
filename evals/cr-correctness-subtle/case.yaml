@@ -1,0 +1,16 @@
+schema_version: "1.1"
+name: cr-correctness-subtle
+description: guardtower should catch a subtle off-by-one in nextMeetings — the loop (i=1; i<count) returns count-1 dates and skips the first week.
+tags: [guardtower, correctness, typescript]
+runs: 3
+execution:
+  max_turns: 40
+  timeout_seconds: 1200
+  allowed_tools: [Read, Glob, Grep, Skill, Agent, TodoWrite, Write, Edit]
+  prompt: |
+    This repo has an uncommitted change reworking the recurring reading-group
+    meeting-date generator (CHANGE.diff; changed files under src/). Please run a thorough
+    (guardtower) review of the change before I commit it. Report what you
+    find — don't change any code.
+context:
+  scaffold_script: scaffold.sh
