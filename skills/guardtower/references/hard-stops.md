@@ -13,7 +13,7 @@ reporting, not from a blunt cutoff mid-thought.
 Before any lens work, the facet asks: *does this change even warrant me?* A docs-only diff does not
 warrant the Security facet; a three-line copy change does not warrant the Architectural facet. If
 the answer is no, the facet returns `relevance: { skipped: <reason> }` immediately, having spent
-almost nothing, and writes an artifact recording the skip. This is the single largest saver — it
+almost nothing. This is the single largest saver — it
 skips whole reviews.
 
 ## 2. Top-N severity cap
