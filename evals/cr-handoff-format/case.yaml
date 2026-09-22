@@ -1,0 +1,17 @@
+schema_version: "1.1"
+name: cr-handoff-format
+description: When asked for a shareable handoff, guardtower produces the per-finding handoff layout (current code / proposed fix / why) and still stays report-only — the fix is written, never applied.
+tags: [guardtower, handoff, report-only, php]
+runs: 3
+execution:
+  max_turns: 40
+  timeout_seconds: 1200
+  allowed_tools: [Read, Glob, Grep, Skill, Agent, TodoWrite, Write, Edit]
+  prompt: |
+    This repo has an uncommitted change adding a user-name search (CHANGE.diff;
+    changed files under src/). Please run a thorough (guardtower) review, and
+    give me a shareable handoff I can drop straight into the pull request for
+    the team — for each issue, show the current code, the proposed fix, and why
+    it works. Don't change any code yourself.
+context:
+  scaffold_script: scaffold.sh
