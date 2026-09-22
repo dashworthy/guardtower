@@ -1,0 +1,20 @@
+{
+  "name": "guardtower",
+  "description": "guardtower plugin marketplace",
+  "owner": {
+    "name": "Andrew Leach",
+    "email": "7387639+andyleach@users.noreply.github.com"
+  },
+  "plugins": [
+    {
+      "name": "guardtower",
+      "description": "Standalone, in-depth, opt-in code review through a menu of specialized facets, reconciled into one report. Report-only.",
+      "version": "0.1.0",
+      "source": ".",
+      "author": {
+        "name": "Andrew Leach",
+        "email": "7387639+andyleach@users.noreply.github.com"
+      }
+    }
+  ]
+}
