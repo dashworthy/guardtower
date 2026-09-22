@@ -1,7 +1,7 @@
 {
   "name": "guardtower",
   "description": "Standalone, in-depth, opt-in code review: pick which specialized facets (security, concurrency, data-safety, and more) to run against a change, fan them out as self-limiting reviewers, and reconcile their findings into one markdown report. Report-only \u2014 never edits code.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": {
     "name": "Andrew Leach",
     "email": "7387639+andyleach@users.noreply.github.com"

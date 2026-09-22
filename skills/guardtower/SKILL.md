@@ -129,9 +129,11 @@ from the facet list's **Pre-check when the change…** column.
    produces, so the reviewers stay fully independent. Mark each facet's todo `in_progress` as it
    goes out, or as you begin it inline.
 4. **Hand each facet the contract.** Each selected facet is defined by its file
-   `${CLAUDE_PLUGIN_ROOT}/skills/guardtower/references/facets/<facet>/facet.md`; dispatch a reviewer
-   by handing it that **absolute** path to read and apply — named by absolute path so a cold
-   subagent, which boots in a directory it was never told, can resolve it; the facet's own
+   `references/facets/<facet>/facet.md`, relative to **this skill's own directory**. Before
+   dispatching a reviewer, resolve that to an **absolute** path — prefix it with the plugin root your
+   runtime exposes (`${CLAUDE_PLUGIN_ROOT}` under Claude Code) or, failing that, this skill's own
+   directory — and hand the reviewer that absolute path to read and apply, so a cold subagent, which
+   boots in a directory it was never told, can resolve it; the facet's own
    `references/*.md` and `../../*` citations then resolve relative to that file's own directory. Pass
    every facet the same request and expect the same result shape — see
    [references/facet-contract.md](references/facet-contract.md). Set the request's `caps` (`top_n`,

@@ -9,7 +9,7 @@
     {
       "name": "guardtower",
       "description": "Standalone, in-depth, opt-in code review through a menu of specialized facets, reconciled into one report. Report-only.",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "source": ".",
       "author": {
         "name": "Andrew Leach",
