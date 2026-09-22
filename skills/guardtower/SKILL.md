@@ -153,8 +153,13 @@ from the facet list's **Pre-check when the change…** column.
    claim) followed by a short per-finding detail (the `why` and any suggested direction), plus each
    facet's relevance verdict and any `dropped` count stated in words. Write it to the path the
    caller named, or a sensible default (e.g. `guardtower-report.md` in the working directory) when
-   none was given. The report never leaves the machine on its own — posting it onward, or acting on
-   it, is the human's to do; guardtower is report-only and stops at the written report.
+   none was given. When the report is going to a person or a PR/wiki rather than a quick local read,
+   fill the richer, shareable handoff scaffold —
+   [references/templates/markdown/code-review-handoff.md](references/templates/markdown/code-review-handoff.md)
+   (per-finding current code, proposed fix, and why it works) — instead of the terse table. Either
+   way the report never leaves the machine on its own: posting it onward, or acting on it, is the
+   human's to do; guardtower is report-only and stops at the written report (a "proposed fix" is
+   described, never applied).
 
 ## Track each facet as a todo
 
