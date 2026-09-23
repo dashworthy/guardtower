@@ -1,5 +1,7 @@
 # guardtower
 
+![guardtower — in-depth, opt-in code review across selectable facets](art/banner.svg)
+
 Standalone, in-depth, **opt-in** code review for Claude Code.
 
 Point it at a change — a diff, a branch, or a PR — and it lets you pick which review **facets** to
