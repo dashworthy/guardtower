@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="1200" height="400" role="img" aria-label="guardtower — in-depth, opt-in code review across selectable facets">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="0%" r="70%">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0.35"/>
+      <stop offset="60%" stop-color="#0EA5E9" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0B1120" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#0EA5E9"/>
+    </linearGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0 L0 0 0 48" fill="none" stroke="#1E293B" stroke-width="1"/>
+    </pattern>
+    <style>text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}</style>
+  </defs>
+
+  <rect width="1200" height="400" fill="#0B1120"/>
+  <rect width="1200" height="400" fill="url(#grid)" opacity="0.5"/>
+  <rect width="1200" height="400" fill="url(#glow)"/>
+
+  <!-- blueprint tower schematic, right half, centre x=880 -->
+  <g stroke="#38BDF8" stroke-width="1.5" fill="none" opacity="0.22" stroke-linejoin="round">
+    <line x1="880" y1="14" x2="880" y2="60" stroke-dasharray="4 5"/>
+    <circle cx="880" cy="70" r="10"/>
+    <path d="M846 96 h68 v18 h-68 z"/>
+    <path d="M846 96 v-10 h9 v6 h9 v-6 h9 v6 h9 v-6 h9 v6 h9 v-6 h9 v6 h9 v-6 h9 v10"/>
+    <path d="M853 114 l14 22 h-46 l14 -22"/>
+    <path d="M821 136 h118 v22 h-118 z"/>
+    <polygon points="838,158 922,158 946,372 814,372"/>
+    <line x1="838" y1="228" x2="922" y2="228"/>
+    <line x1="828" y1="300" x2="932" y2="300"/>
+    <path d="M838 158 L922 372 M922 158 L838 372" opacity="0.6"/>
+    <line x1="806" y1="372" x2="954" y2="372"/>
+    <path d="M760 96 v276" stroke-dasharray="2 6"/>
+    <path d="M754 96 h12 M754 372 h12"/>
+  </g>
+  <text x="760" y="238" transform="rotate(-90 760 238)" font-size="11" font-weight="700" letter-spacing="0.28em" fill="#38BDF8" opacity="0.4">ELEV. 400</text>
+
+  <!-- wordmark -->
+  <text x="72" y="255" font-size="100" font-weight="800" letter-spacing="-0.04em" fill="url(#accent)">guardtower</text>
+  <text x="76" y="296" font-size="22" font-weight="400" fill="#94A3B8">In-depth, opt-in code review across selectable facets</text>
+
+  <!-- crafted-by mark -->
+  <text x="1180" y="344" text-anchor="end" font-size="9" font-weight="800" font-style="italic" letter-spacing="0.02em" fill="#94A3B8">CRAFTED BY</text>
+  <text x="1180" y="362" text-anchor="end" font-size="20" font-weight="900" font-style="italic" letter-spacing="-0.07em"><tspan fill="#F1F5F9">DASH</tspan><tspan fill="#CBD5E1">WORTHY</tspan></text>
+</svg>
