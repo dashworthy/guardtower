@@ -12,12 +12,24 @@ decides a change is worth a deep look and runs it.
 
 ## Install
 
+guardtower ships manifests for both Claude Code (`.claude-plugin/`) and Codex (`.codex-plugin/` +
+`.agents/plugins/marketplace.json`), sharing one skill tree.
+
+**Claude Code:**
+
 ```
 /plugin marketplace add dashworthy/guardtower
 /plugin install guardtower@guardtower
 ```
 
-guardtower depends on no other plugin.
+**Codex:**
+
+```
+/plugin marketplace add dashworthy/guardtower
+/plugin install guardtower
+```
+
+Then invoke the `guardtower` skill in either. guardtower depends on no other plugin.
 
 ## Use
 

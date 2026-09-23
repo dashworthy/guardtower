@@ -1,0 +1,20 @@
+{
+  "name": "guardtower",
+  "interface": {
+    "displayName": "Guardtower"
+  },
+  "plugins": [
+    {
+      "name": "guardtower",
+      "source": {
+        "source": "local",
+        "path": "."
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Engineering"
+    }
+  ]
+}
