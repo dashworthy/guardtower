@@ -43,5 +43,5 @@
 
   <!-- crafted-by mark -->
   <text x="1180" y="344" text-anchor="end" font-size="9" font-weight="800" font-style="italic" letter-spacing="0.02em" fill="#94A3B8">CRAFTED BY</text>
-  <text x="1180" y="362" text-anchor="end" font-size="20" font-weight="900" font-style="italic" letter-spacing="-0.07em"><tspan fill="#F1F5F9">DASH</tspan><tspan fill="#CBD5E1">WORTHY</tspan></text>
+  <text x="1180" y="362" text-anchor="end" font-size="20" font-weight="900" font-style="italic" letter-spacing="-0.07em"><tspan fill="url(#accent)">DASHWORTHY</tspan></text>
 </svg>
