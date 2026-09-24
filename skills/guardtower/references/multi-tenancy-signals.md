@@ -1,14 +1,13 @@
-# Multi-tenancy signals — classifying a repo's tenancy model for the menu-proposal gate
+# Multi-tenancy signals — classifying a repo's tenancy model for the proposal gate
 
 This reference is how the orchestrator decides, **once per run at the repo level**, whether to
-*propose* the single `reviewing-tenant-isolation` facet on the menu — and which of its two lenses it
+*propose* the single `reviewing-tenant-isolation` facet — and which of its two lenses it
 applies. It is read and reasoned against by the agent; it is **not** a script, a grep list, or a
 checklist to mechanically match. The goal is a single verdict about how the application isolates
 tenants, so the facet applies the lens whose failure modes actually apply (or the facet isn't
 proposed at all, when the app isn't multi-tenant).
 
-This is the **repo-level** gate — the upper of code-review's two gates. It selects which facets appear
-(and pre-checked); each facet then runs its own **per-change relevance gate** on the actual diff. A
+This is the **repo-level** gate — the upper of code-review's two gates. It decides which facets are selected; each facet then runs its own **per-change relevance gate** on the actual diff. A
 facet proposed here can still skip itself on a change that touches no tenant-scoped surface.
 
 ## What to read
@@ -50,24 +49,23 @@ isolation is a **connection** boundary rather than a query predicate. Signals:
 
 ## Classification — the verdict
 
-Reason over the signals and emit exactly one verdict, consumed only by menu construction:
+Reason over the signals and emit exactly one verdict, consumed only by facet selection:
 
 - **`shared`** — shared-schema signals dominate and no per-tenant connection switching is present.
-  Propose the **tenant-isolation** facet, pre-checked, applying its **shared-DB lens**.
+  Propose the **tenant-isolation** facet, selected, applying its **shared-DB lens**.
 - **`per-db`** — per-tenant connection/database signals dominate. Propose the **tenant-isolation**
-  facet, pre-checked, applying its **isolated-DB lens**.
+  facet, selected, applying its **isolated-DB lens**.
 - **`both`** — the app genuinely runs both models (e.g. shared-schema within each tenant database, or
-  distinct subsystems using each). Propose the **tenant-isolation** facet, pre-checked, applying
+  distinct subsystems using each). Propose the **tenant-isolation** facet, selected, applying
   **both lenses**; it still self-skips per change.
 - **`none`** — no credible multi-tenancy signal; the app is single-tenant. Do **not** propose the
-  tenant-isolation facet — it doesn't appear on the menu.
+  tenant-isolation facet — it is not selected.
 - **`ambiguous`** — signals are mixed, weak, or conflicting and no model clearly dominates. The
   resolution is to **ask once**: put a single structured question to the human naming what was found
   (shared-schema vs per-tenant-DB vs single-tenant), using a tool to ask it where one is available,
   take the answer as the verdict, and do not
   re-ask within the run.
 
-The verdict governs only *whether the tenant-isolation facet is proposed and pre-checked, and which
-lens it applies*. It never runs the facet by itself, never suppresses a facet the human then
-selects, and never overrides a facet's own per-change relevance gate. The frontend facet is
-unrelated to this classification — it is opt-in and not tenancy-gated.
+The verdict governs only *whether the tenant-isolation facet is proposed and selected, and which
+lens it applies*. It never runs the facet by itself, and never overrides a facet's own per-change relevance
+gate. The frontend facet is unrelated to this classification — it is opt-in and not tenancy-gated.

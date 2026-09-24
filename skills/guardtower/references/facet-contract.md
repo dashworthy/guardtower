@@ -2,7 +2,7 @@
 
 The uniform interface between the `reviewing` orchestrator and every facet skill. It is identical
 for all facets, so the orchestrator knows nothing facet-specific and a new facet is "implement this
-contract + add a menu row."
+contract + add a row to the facet list."
 
 ## What every facet does (the shared procedure)
 
@@ -67,7 +67,7 @@ facet, so the discipline is tuned in one place.
 ```
 
 A facet returns its findings **in-band**, in this result — there is no per-facet file; the
-orchestrator reconciles every facet's result into the single report (SKILL.md step 6). A clean
+orchestrator reconciles every facet's result into the single report (SKILL.md step 8). A clean
 change returns `findings: []`. That is a valid, complete result — not a facet that
 gave up or missed something. The failure mode to guard against is the opposite reflex: reaching
 for a hedged, sub-floor finding so the list is not empty. Padding a clean result with a finding
@@ -84,9 +84,19 @@ the honest result is `[]`.
   location:   <file:line, or a symbol name>,
   claim:      <one sentence: what is wrong>,
   why:        <one sentence: the consequence, or the rule broken>,
-  suggestion: <optional: the direction of a fix — never applied; guardtower is report-only>
+  evidence:   [ { at: <file:line>, code: <the cited lines, verbatim>, shows: <what they prove> }, ... ],
+              // REQUIRED, at least one: the checkable facts in THIS codebase that make the claim true
+  suggestion: <the direction of a fix — never applied; guardtower is report-only>
 }
 ```
+
+`evidence` is what separates a finding from a hunch: the specific lines — in the change or the code
+it touches — that make the claim true (where untrusted input enters and the line it reaches, the
+caller that retries, the column's type, the helper that already exists). A restatement of the claim
+is not evidence. **No evidence, no finding** — a facet that cannot cite lines drops the finding
+rather than returning it. The orchestrator carries `evidence` into the report's **Evidence** part
+and builds **Current code**, **Proposed fix**, and **Why this fixes it** from `location`,
+`suggestion`, and `why` (SKILL.md step 8).
 
 `claim` and `why` must read on their own, for a reviewer who did not write the code and holds no
 shared context.

@@ -10,7 +10,7 @@ execution:
   prompt: |
     This repo has an uncommitted change adding a user-name search to the
     repository layer. The change is captured in CHANGE.diff, and the changed
-    files are under src/. Please run a thorough (guardtower) review of this
+    files are under src/. Please run a medium-effort (guardtower) review of this
     change before I commit it. Report what you find — don't change any code.
 context:
   scaffold_script: scaffold.sh

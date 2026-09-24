@@ -1,14 +1,13 @@
-# Stack signals — classifying a repo's frameworks for the menu-proposal gate
+# Stack signals — classifying a repo's frameworks for the proposal gate
 
 This reference is how the orchestrator decides, **once per run at the repo level**, whether to
 *propose* the `reviewing-framework-best-practices` facet — and which stack(s) it covers for this
 run. It is read and reasoned against by the agent; it is **not** a script, a grep list, or a
 checklist to mechanically match. The goal is the set of frameworks the application actually runs,
-so the menu offers the facet whose idiom-specific findings actually apply.
+so the run selects the facet whose idiom-specific findings actually apply.
 
 This is the **repo-level** gate — the upper of code-review's two gates, the same one
-`multi-tenancy-signals.md` runs for the tenant-isolation facets. It selects which facets appear
-(and pre-checked); the facet then runs its own **per-change relevance gate** on the actual diff,
+`multi-tenancy-signals.md` runs for the tenant-isolation facets. It decides which facets are selected; the facet then runs its own **per-change relevance gate** on the actual diff,
 narrowed further to the file(s) a change actually touches (see the *What this facet covers* table in
 [`reviewing-framework-best-practices`'s facet](facets/reviewing-framework-best-practices/facet.md)).
 A facet proposed here can still skip itself on a change that touches no stack-relevant surface.
@@ -99,8 +98,8 @@ Electron lens, not proposed through this gate.
 Emit the **set** of matched stacks — zero or more of: `laravel`, `tailwind`, `symfony`,
 `orocommerce`, `react`, `vue`, `typescript`, `javascript`, `backbone`, `electron`.
 
-- **Non-empty set** — propose the `reviewing-framework-best-practices` facet, pre-checked.
-- **Empty set** — propose neither; the facet does not appear on the menu at all, mirroring how
+- **Non-empty set** — propose the `reviewing-framework-best-practices` facet, selected.
+- **Empty set** — propose neither; the facet is not selected at all, mirroring how
   the tenant-isolation facets don't appear under a `none` verdict.
 
 There is no `ambiguous` case here the way there is for tenancy: a stack is either present in the
