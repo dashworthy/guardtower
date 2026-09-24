@@ -1,0 +1,16 @@
+schema_version: "1.1"
+name: cr-handoff-default
+description: With no mention of a handoff, PR, or sharing, guardtower's report still uses the handoff template — per-finding current code / proposed fix / why, plus a Review scope section — because it is the only report format.
+tags: [guardtower, handoff, mechanics, php]
+runs: 3
+execution:
+  max_turns: 40
+  timeout_seconds: 1200
+  allowed_tools: [Read, Glob, Grep, Skill, Agent, TodoWrite, Write, Edit, AskUserQuestion]
+  prompt: |
+    This repo has an uncommitted change adding a user-name search to the
+    repository layer (CHANGE.diff; changed files under src/). Please run a
+    quick medium-effort (guardtower) review of this change before I commit it.
+    Report what you find; don't change any code.
+context:
+  scaffold_script: scaffold.sh

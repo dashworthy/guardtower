@@ -9,7 +9,7 @@ execution:
   allowed_tools: [Read, Glob, Grep, Skill, Agent, TodoWrite, Write, Edit]
   prompt: |
     This repo has an uncommitted change adding room-booking logic to the
-    scheduler (CHANGE.diff; changed files under src/). Please run a thorough
+    scheduler (CHANGE.diff; changed files under src/). Please run a medium-effort
     (guardtower) review of the change before I commit it. Report what you
     find — don't change any code.
 context:

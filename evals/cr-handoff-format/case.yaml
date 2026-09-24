@@ -9,7 +9,7 @@ execution:
   allowed_tools: [Read, Glob, Grep, Skill, Agent, TodoWrite, Write, Edit]
   prompt: |
     This repo has an uncommitted change adding a user-name search (CHANGE.diff;
-    changed files under src/). Please run a thorough (guardtower) review, and
+    changed files under src/). Please run a medium-effort (guardtower) review, and
     give me a shareable handoff I can drop straight into the pull request for
     the team — for each issue, show the current code, the proposed fix, and why
     it works. Don't change any code yourself.
