@@ -19,20 +19,20 @@ so verification cost scales with effort without a new argument.
 | Purpose | Cut false positives (not primarily a dev handoff) |
 | Where tests are written and run | A throwaway git worktree outside the repo; copies kept in the run dir |
 | Unverifiable findings | Kept, labelled `unverified: <reason>`. Only a clean test result drops a finding |
-| Who verifies | A separate step after reconcile; one fresh verifier agent per behavioural finding |
+| Who verifies | A separate step after reconcile; **one** fresh verifier agent that works every behavioural finding as a checklist (amended 2026-10-16 for token cost — see `2026-10-16-single-reviewer-design.md`) |
 | When | Every run, every effort |
 | Test shape | Asserts the **correct** behaviour: fails today, passes once fixed |
 
 ## Workflow change
 
-Steps 1–7 are unchanged. A new step 8 is inserted; the report becomes step 9.
+Steps 1–7 are as in `2026-10-16-single-reviewer-design.md`. A new step 8 is inserted; the report becomes step 9.
 
 ```
-1 resolve change, open run dir    6 hand each facet the contract
+1 resolve change, open run dir    6 hand the reviewer the brief
 2 settle effort                   7 reconcile + dedupe
 3 tenancy / stack verdicts        8 VERIFY            <- new
 4 select facets                   9 write report.md   (was 8)
-5 fan out facets
+5 inline or one reviewer
 ```
 
 ### Step 8 — Verify
@@ -61,12 +61,12 @@ Steps 1–7 are unchanged. A new step 8 is inserted; the report becomes step 9.
    trivial one written into the worktree). If the suite does not boot, mark every behavioural
    finding `unverified: test suite not runnable — <first error line>`, dispatch no verifiers, and
    go to cleanup.
-5. **Dispatch verifiers.** One fresh verifier agent per behavioural finding, each handed the
-   request in `references/verify-contract.md`. All share the one worktree; each writes a uniquely
-   named test file (`guardtower_<finding-id>_test.<ext>` or the runner's naming convention) and
-   runs **only its own file**. Default: parallel. If the smoke check shows the tests share a
-   database or other external state, dispatch them one at a time. Each verifier gets a todo,
-   `in_progress` on dispatch and `completed` on return.
+5. **Dispatch the verifier.** **One** fresh verifier agent, handed the request in
+   `references/verify-contract.md` listing every behavioural finding. It works them in order, as
+   a checklist, in the one worktree: for each finding it writes a uniquely named test file
+   (`guardtower_<finding-id>_test.<ext>` or the runner's naming convention) and runs **only that
+   file**, so shared database or external state is never contended. The verify step gets one
+   todo (`verify <n> findings`), `in_progress` on dispatch and `completed` on return.
 6. **Apply verdicts.** `verified` → kept, labelled verified. `disproved` → removed from the
    findings and added to the report's **Disproved** list. `unverified` → kept, labelled with the
    reason.
@@ -81,23 +81,33 @@ Steps 1–7 are unchanged. A new step 8 is inserted; the report becomes step 9.
 
 ```
 {
-  finding:        Finding,           // the reconciled finding, schema per facet-contract.md
+  findings: [
+    { finding: Finding,              // the reconciled finding, schema per reviewer-brief.md
+      test_file: <the file name to use> },
+    ...
+  ],
   worktree:       <absolute path>,   // the isolated copy; the only place the verifier writes
   test_command:   <how to run a single test file, with {file} placeholder>,
-  test_dir:       <where new tests go, relative to worktree>,
-  test_file:      <the file name to use>
+  test_dir:       <where new tests go, relative to worktree>
 }
 ```
 
 ### Result — verifier → orchestrator
 
+One entry per finding, in request order:
+
 ```
 {
-  status:          "verified" | "disproved" | "unverified",
-  reason:          <one line>,
-  test_file:       <path inside the worktree> | none,
-  command:         <the exact command run> | none,
-  output_excerpt:  <the failing assertion or the relevant output, at most ~15 lines> | none
+  results: [
+    {
+      status:          "verified" | "disproved" | "unverified",
+      reason:          <one line>,
+      test_file:       <path inside the worktree> | none,
+      command:         <the exact command run> | none,
+      output_excerpt:  <the failing assertion or the relevant output, at most ~15 lines> | none
+    },
+    ...
+  ]
 }
 ```
 
@@ -111,7 +121,7 @@ Steps 1–7 are unchanged. A new step 8 is inserted; the report becomes step 9.
    - test passes → `disproved`;
    - assertion fails for an unrelated reason, or the test errors (does not compile, setup fails,
      fixture missing, timeout) → `unverified`. **An error is never a verdict.**
-3. **Three attempts.** The verifier may rewrite its test up to three times to get it to compile
+3. **Three attempts per finding.** The verifier may rewrite each finding's test up to three times to get it to compile
    and run. After the third failed attempt the result is `unverified: <last error line>`.
 4. **Writes only inside the worktree, only test files, only with Write.** Never Edit — the
    `report-only-no-edits` graders count Edit calls. Never modify the code under test, a fixture,
@@ -149,7 +159,7 @@ does not do** are updated to say exactly this. The report is still the last file
 |---|---|
 | `skills/guardtower/SKILL.md` | New step 8; report becomes step 9; report-only and run-artifacts wording; verifier todos; description mentions verification |
 | `skills/guardtower/references/verify-contract.md` | New — request, result, rules above |
-| `skills/guardtower/references/facet-contract.md` | Note that facets still run no tests; verification is the orchestrator's step 8 |
+| `skills/guardtower/references/reviewer-brief.md` | Note that the reviewer runs no tests; verification is the orchestrator's step 8 |
 | `skills/guardtower/references/templates/markdown/code-review-handoff.md` | Verification label, Proof block, Verification line, Disproved list |
 | `README.md`, `evals/README.md` | Describe verification; list new evals |
 | `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` | Mention verification; bump 0.4.0 → 0.5.0 |
@@ -165,7 +175,7 @@ needs nothing installed. Each allows `Bash` in `allowed_tools`.
 |---|---|---|
 | `cr-verify-confirms` | Adds a search function that builds SQL by string concatenation over an sqlite3 connection; repo has a passing `tests/` suite | SQLi finding marked **verified**; a test file exists under `.guardtower/*/tests/`; report has the fails-today Proof block; worktree gone (`git worktree list` shows one entry); `git status` shows only `.guardtower/` as new; no Edit calls |
 | `cr-verify-disproves` | A change that reads like an unescaped-input bug, but the value is validated by a caller the diff doesn't show | If guardtower raises the finding, it is **not** in the findings and **is** in the Disproved list; worktree gone; no Edit calls |
-| `cr-verify-unrunnable` | A behavioural bug in a repo whose test runner is configured but broken (e.g. a `conftest.py` that raises on import) | Finding kept as `unverified: test suite not runnable`; no verifier agents dispatched; worktree gone; no Edit calls |
+| `cr-verify-unrunnable` | A behavioural bug in a repo whose test runner is configured but broken (e.g. a `conftest.py` that raises on import) | Finding kept as `unverified: test suite not runnable`; no verifier agent dispatched; worktree gone; no Edit calls |
 
 ## Out of scope
 
