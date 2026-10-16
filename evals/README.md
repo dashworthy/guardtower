@@ -6,7 +6,7 @@ ablation) so every number says what guardtower *adds* over plain Claude.
 
 ## The cases
 
-Twenty cases in three groups.
+Twenty-one cases in three groups.
 
 **Recall** — a planted defect the review must name:
 
@@ -21,6 +21,7 @@ Twenty cases in three groups.
 | `cr-idempotency-retry` | Catches a payment charge retried with no idempotency key (Python). |
 | `cr-numeric-precision-money` | Catches money handled as floating point (Python). |
 | `cr-tenant-isolation-leak` | Catches a query in a multi-tenant repo that dropped its `tenant_id` scope. |
+| `cr-late-facet-big-diff` | On a multi-file change above the inline threshold, dispatches exactly one reviewer agent and still catches an N+1 planted in a late facet (technical) (Python). |
 
 **Controls** — no false positives:
 
