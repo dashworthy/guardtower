@@ -137,7 +137,7 @@ facet list's **Select when the change…** column — the human is not asked to 
      the change;
    - each **opt-in** facet whose list entry matches the change's character is selected, erring
      toward inclusion — a false skip (a lens left off) is the harmful direction, while a
-     false-positive self-skips cheaply at dispatch;
+     false-positive self-skips cheaply when the reviewer reaches it;
    - each **core-when-present** facet (`reviewing-tenant-isolation` and
      `reviewing-framework-best-practices`) is selected when the step-3 proposal gate proposed it —
      the proposal is its list entry, so it is *not* further gated on the change's character.
@@ -148,9 +148,9 @@ facet list's **Select when the change…** column — the human is not asked to 
    these?" prompt. Announce the selection in one line (each selected facet, and for each opt-in or
    core-when-present facet the phrase from the change that selected it) and proceed straight to
    dispatch; the same selection, with its reasons and the facets left out, goes into the report. The
-   list only selects — each facet's own per-change relevance gate **stays authoritative** at
-   dispatch, so a selected facet the change never touches self-skips there rather than producing a
-   hollow review. The orchestrator opens no facet's own doc to select; a facet's file is read only
+   list only selects — each facet's own per-change relevance gate **stays authoritative** when
+   the reviewer reaches it, so a selected facet the change never touches self-skips there rather
+   than producing a hollow review. The orchestrator opens no facet's own doc to select; a facet's file is read only
    when the reviewer reaches it (step 6).
 5. **Inline or one reviewer.** On a small change — roughly one file, ~20 changed lines or fewer,
    one hunk — work the reviewer brief's procedure yourself, inline. Above that floor, dispatch
@@ -174,12 +174,12 @@ facet list's **Select when the change…** column — the human is not asked to 
    `frontend`, `test-quality`, `architectural`, `readability`
 
    Set `caps` (`top_n`, `floor`) from the **effort** settled in step 2 per the table in
-   **Arguments**; they apply to each facet separately. The reviewer enforces the hard stops
+   **Arguments**; they apply to each facet separately. Pass the step-3 tenancy verdict as `tenancy` (an `ambiguous` verdict is passed as the human's answer to the step-3 question). The reviewer enforces the hard stops
    itself, per facet, at the source; the orchestrator does not trim findings afterward. The
    reviewer returns its result to the orchestrator and writes no file.
 7. **Reconcile.** Take the reviewer's `results` — one entry per facet, skipped ones included — and
    mark every facet's todo `completed`. The reviewer files each finding under one owning facet;
-   still merge any two findings that cite the same location, then order the findings and hold
+   still merge two findings only when they name the same defect at the same location, then order the findings and hold
    them for the single report. Carry each facet's `dropped` count through into the report: where any facet
    hit its cap, the report states how many genuine findings wait behind it (e.g. "Security: 3 more
    above the floor — re-run to see them"). The cap keeps the report short; it does not get to make

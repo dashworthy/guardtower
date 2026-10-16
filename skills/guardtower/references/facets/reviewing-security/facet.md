@@ -22,9 +22,6 @@ permission code, input handling, queries, file or network I/O, crypto, secrets, 
 access-control checks, an Electron process-model surface, anything user-facing or handling untrusted
 data. A pure docs/comment/formatting change, or a test-fixtures-only change, is out of scope.
 
-The shared procedure — report-only shape, diff-bounded reach, the per-facet procedure, and the
-generic "what this does not do" — lives in [../../reviewer-brief.md](../../reviewer-brief.md), with the hard stops.
-
 **Facet-specific boundary:** the *non-security* Electron idiom (heavy work on the main process, a
 wrong-side-of-the-split responsibility, lifecycle/packaging hygiene) belongs to the **Framework Best
 Practices** facet's Electron stack, not this facet.

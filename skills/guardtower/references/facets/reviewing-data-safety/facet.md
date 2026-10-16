@@ -16,9 +16,6 @@ classes:
 change, or a bulk data operation (a mass `UPDATE`/`DELETE`, a backfill, a drop). Application logic,
 config, docs, a read-only query, or a single-row write in normal code is out of scope.
 
-The shared procedure — report-only shape, diff-bounded reach, the per-facet procedure, and the
-generic "what this does not do" — lives in [../../reviewer-brief.md](../../reviewer-brief.md), with the hard stops.
-
 **Facet-specific boundary:** it reasons about the data operation visible in the diff and does **no**
 data-flow graph or table-usage scan to prove which rows a statement touches or who else reads the
 data; what the diff does not show is an accepted blind spot. A bounded, reversible, idempotent

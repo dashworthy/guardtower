@@ -16,14 +16,17 @@ concern. Everything below holds for every facet and is not repeated in them.
     top_n: <int>,                  // per facet: report at most this many, most severe first
     floor: "low" | "med" | "high"  // per facet: drop findings weaker than this bar
   },
+  tenancy:    "shared" | "per-db" | "both" | "none",  // step-3 verdict; selects the tenant-isolation lens
   facets: [ <absolute path to facet.md>, ... ]      // the checklist, in order
 }
 ```
 
 ## Procedure
 
-1. **Read the change once.** The diff, plus — where a lens needs it — the public surface of the
-   modules the change already touches. No repo-wide scan, graph, or index: a defect the change
+1. **Read the diff once, up front.** Never re-read it. When a facet's lens needs the public
+   surface of a module the change touches — the helper a reuse check compares against, the code a
+   test exercises, a tenant scope — read it when that facet first needs it, and reuse anything
+   already read for later facets. No repo-wide scan, graph, or index: a defect the change
    introduces is in reach; what the diff does not show is an accepted blind spot.
 2. **Work the facets in order.** For each one:
    1. Read its `facet.md`.
@@ -31,7 +34,8 @@ concern. Everything below holds for every facet and is not repeated in them.
       `relevance: { skipped: <one-line reason> }` and move to the next facet **without opening
       its checklist**.
    3. **Apply the lens(es).** Open the facet's checklist(s) now, not before, and work them against
-      the change you already read. A facet with several lenses applies each whose surface the
+      the diff you already read (plus
+      any touched-module surface this lens needs). A facet with several lenses applies each whose surface the
       change raises; the cap spans them all.
    4. **Floor, then cap, then tally `dropped`** — for this facet alone (hard stops below).
    5. Record this facet's result, then move on. Do not carry an earlier facet's conclusions into

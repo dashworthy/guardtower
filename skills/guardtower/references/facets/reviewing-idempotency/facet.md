@@ -22,8 +22,7 @@ outbound call or write that a client or infrastructure can replay (a payment, an
 creation). A change with no repeatable side effect (a pure read, an in-memory computation, a
 naturally idempotent write, config, docs) is out of scope.
 
-The shared procedure — report-only shape, diff-bounded reach, the per-facet procedure, and the
-generic "what this does not do" — lives in [../../reviewer-brief.md](../../reviewer-brief.md), with the hard stops. When it fires, name what triggers the
+When it fires, name what triggers the
 repeat (a redelivery, a retry, a client replay) and the duplicated effect.
 
 **Facet-specific boundaries:**
