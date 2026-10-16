@@ -174,15 +174,17 @@ facet list's **Select when the change…** column — the human is not asked to 
    `frontend`, `test-quality`, `architectural`, `readability`
 
    Set `caps` (`top_n`, `floor`) from the **effort** settled in step 2 per the table in
-   **Arguments**; they apply to each facet separately. Pass the step-3 tenancy verdict as `tenancy` (an `ambiguous` verdict is passed as the human's answer to the step-3 question). The reviewer enforces the hard stops
-   itself, per facet, at the source; the orchestrator does not trim findings afterward. The
-   reviewer returns its result to the orchestrator and writes no file.
+   **Arguments**; they apply to each facet separately. Pass the step-3 tenancy verdict as
+   `tenancy` (an `ambiguous` verdict is passed as the human's answer to the step-3 question). The
+   reviewer enforces the hard stops itself, per facet, at the source; the orchestrator does not
+   trim findings afterward. The reviewer returns its result to the orchestrator and writes no file.
 7. **Reconcile.** Take the reviewer's `results` — one entry per facet, skipped ones included — and
    mark every facet's todo `completed`. The reviewer files each finding under one owning facet;
-   still merge two findings only when they name the same defect at the same location, then order the findings and hold
-   them for the single report. Carry each facet's `dropped` count through into the report: where any facet
-   hit its cap, the report states how many genuine findings wait behind it (e.g. "Security: 3 more
-   above the floor — re-run to see them"). The cap keeps the report short; it does not get to make
+   still merge two findings only when they name the same defect at the same location, then order
+   the findings and hold them for the single report. Carry each facet's `dropped` count through
+   into the report: where any facet hit its cap, the report states how many genuine findings wait
+   behind it (e.g. "Security: 3 more above the floor — re-run to see them"). The cap keeps the
+   report short; it does not get to make
    the report *look* complete when it isn't. A reader deciding whether to re-run needs to know work
    was held back, not discover it by accident.
 8. **Write the report — always from the handoff template.** The reconciled findings are the whole
@@ -201,7 +203,9 @@ facet list's **Select when the change…** column — the human is not asked to 
    described in the report for them to apply, not applied. The report is the last file this turn
    writes. Write it whole, in one file-write call; to revise it, rewrite the whole file the same
    way rather than patching it with an edit tool, so any edit-tool call in a guardtower run is
-   unambiguously a code edit — which report-only forbids. The report never leaves the machine on
+   unambiguously a code edit — which report-only forbids. If the runtime gives you no file-write
+   tool, put the whole report in the reply and say it could not be saved — never hand the write
+   to a subagent; a withheld tool stays withheld. The report never leaves the machine on
    its own: posting it onward, or acting on it, is the human's to do; guardtower is report-only and
    stops at the written report (a "proposed fix" is described, never applied).
 

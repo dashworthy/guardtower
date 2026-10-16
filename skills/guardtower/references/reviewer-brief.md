@@ -16,8 +16,8 @@ concern. Everything below holds for every facet and is not repeated in them.
     top_n: <int>,                  // per facet: report at most this many, most severe first
     floor: "low" | "med" | "high"  // per facet: drop findings weaker than this bar
   },
-  tenancy:    "shared" | "per-db" | "both" | "none",  // step-3 verdict; selects the tenant-isolation lens
-  facets: [ <absolute path to facet.md>, ... ]      // the checklist, in order
+  tenancy:    "shared" | "per-db" | "both" | "none", // step-3 verdict; picks the tenancy lens
+  facets:     [ <absolute path to facet.md>, ... ]  // the checklist, in order
 }
 ```
 
@@ -34,9 +34,8 @@ concern. Everything below holds for every facet and is not repeated in them.
       `relevance: { skipped: <one-line reason> }` and move to the next facet **without opening
       its checklist**.
    3. **Apply the lens(es).** Open the facet's checklist(s) now, not before, and work them against
-      the diff you already read (plus
-      any touched-module surface this lens needs). A facet with several lenses applies each whose surface the
-      change raises; the cap spans them all.
+      the diff you already read, plus any touched-module surface this lens needs. A facet with
+      several lenses applies each whose surface the change raises; the cap spans them all.
    4. **Floor, then cap, then tally `dropped`** — for this facet alone (hard stops below).
    5. Record this facet's result, then move on. Do not carry an earlier facet's conclusions into
       a later one: judge each lens on the code.

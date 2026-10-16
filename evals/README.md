@@ -122,6 +122,9 @@ How to read this:
 ## Running
 
 ```bash
-claude plugin eval evals/cr-security-sqli      # one case
-claude plugin eval evals/                       # the whole suite
+claude plugin eval . --scaffold --allow-tools Write --case cr-security-sqli   # one case
+claude plugin eval . --scaffold --allow-tools Write                          # the whole suite
 ```
+
+Grant `Write`: without it guardtower cannot save `report.md`, so the run-dir and report-format
+graders cannot pass.
