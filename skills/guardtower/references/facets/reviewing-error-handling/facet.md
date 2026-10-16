@@ -16,9 +16,8 @@ equivalent), an error return or raise path, fallback or retry logic, promise-rej
 handling. A change with no error-handling surface (pure data, config, docs, or a computation that
 neither raises nor guards) is out of scope.
 
-The shared procedure — report-only shape, diff-bounded reach, the four-step workflow, and the
-generic "what this does not do" — lives in [../../facet-contract.md](../../facet-contract.md); the
-hard stops in [../../hard-stops.md](../../hard-stops.md).
+The shared procedure — report-only shape, diff-bounded reach, the per-facet procedure, and the
+generic "what this does not do" — lives in [../../reviewer-brief.md](../../reviewer-brief.md), with the hard stops.
 
 **Facet-specific boundary:** logging preferences and style nits are below the floor by design; its
 concern is silent or masked failure, not logging taste.

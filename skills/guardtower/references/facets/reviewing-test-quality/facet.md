@@ -22,9 +22,8 @@ they cover; no whole-suite audit, no coverage run, no execution.
 it changes behavior that should carry tests. A change with no tests in the diff and no behavior
 needing them (pure docs, config, comment, or a rename with no behavior change) is out of scope.
 
-The shared procedure — report-only shape, diff-bounded reach, the four-step workflow, and the
-generic "what this does not do" — lives in [../../facet-contract.md](../../facet-contract.md); the
-hard stops in [../../hard-stops.md](../../hard-stops.md).
+The shared procedure — report-only shape, diff-bounded reach, the per-facet procedure, and the
+generic "what this does not do" — lives in [../../reviewer-brief.md](../../reviewer-brief.md), with the hard stops.
 
 **Facet-specific boundary:** a security or correctness smell in the code under test is another
 facet's; this one judges the tests. Test naming, framework choice, and formatting are below the floor

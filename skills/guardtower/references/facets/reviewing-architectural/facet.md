@@ -20,9 +20,8 @@ or introduces a new abstraction or interface. A change entirely within one modul
 responsibility (editing a function body, adding a field, fixing a bug in place) moves no boundary and
 is out of scope.
 
-The shared procedure — report-only shape, diff-bounded reach, the four-step workflow, and the
-generic "what this does not do" — lives in [../../facet-contract.md](../../facet-contract.md); the
-hard stops in [../../hard-stops.md](../../hard-stops.md).
+The shared procedure — report-only shape, diff-bounded reach, the per-facet procedure, and the
+generic "what this does not do" — lives in [../../reviewer-brief.md](../../reviewer-brief.md), with the hard stops.
 
 **Facet-specific boundary:** its reach is the boundaries the diff moves; it does not build a
 dependency graph or grade the system the change never touches, and architecture the change neither

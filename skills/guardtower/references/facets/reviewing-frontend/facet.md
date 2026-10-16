@@ -37,9 +37,8 @@ It reasons **statically** about the markup and strings in front of it — it run
 i18n-lint, extractor, or catalog-diff tool, and does not crawl the UI, the data model, or the message
 catalogs.
 
-The shared procedure — report-only shape, diff-bounded reach, the four-step workflow, and the
-generic "what this does not do" — lives in [../../facet-contract.md](../../facet-contract.md); the
-hard stops in [../../hard-stops.md](../../hard-stops.md).
+The shared procedure — report-only shape, diff-bounded reach, the per-facet procedure, and the
+generic "what this does not do" — lives in [../../reviewer-brief.md](../../reviewer-brief.md), with the hard stops.
 
 **Facet-specific boundaries:**
 - It does not **review wording quality** — clarity, tone, grammar, and typos in the source copy are a

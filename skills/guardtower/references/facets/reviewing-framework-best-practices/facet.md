@@ -41,8 +41,7 @@ listed stack's detection signal? No match on any row: short-circuit and return
 reference file and work its classes of defect against the diff.
 
 The rest of the shared procedure — report-only shape, diff-bounded reach, and floor/cap/tally —
-lives in [../../facet-contract.md](../../facet-contract.md); the hard stops in
-[../../hard-stops.md](../../hard-stops.md).
+lives in [../../reviewer-brief.md](../../reviewer-brief.md), with the hard stops.
 
 **Facet-specific boundaries:**
 - A reinvention of an existing framework capability with no stack-specific placement/shape angle

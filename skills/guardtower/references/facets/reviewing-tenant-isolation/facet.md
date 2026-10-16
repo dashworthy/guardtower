@@ -35,9 +35,8 @@ discriminator; isolated-database: a tenant-scoped query, a connection switch, a 
 background job over tenant data, or a migration). A single-tenant app, or a change touching only
 global/shared-reference or central/landlord data, application logic, config, or docs, is out of scope.
 
-The shared procedure — report-only shape, diff-bounded reach, the four-step workflow, and the
-generic "what this does not do" — lives in [../../facet-contract.md](../../facet-contract.md); the
-hard stops in [../../hard-stops.md](../../hard-stops.md).
+The shared procedure — report-only shape, diff-bounded reach, the per-facet procedure, and the
+generic "what this does not do" — lives in [../../reviewer-brief.md](../../reviewer-brief.md), with the hard stops.
 
 **Facet-specific boundary:** it does not **guess the topology** — the deployment model comes from the
 step-1 tenancy verdict; this facet applies the lens that verdict selects. A deliberately global/

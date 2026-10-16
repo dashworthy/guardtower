@@ -23,9 +23,8 @@ functions, data-access code, loops over collections, comparison/date/string hand
 computation, hand-rolled utilities, or framework wiring that could duplicate an existing capability. A
 pure config, docs, or formatting change, or a trivial constant edit, is out of scope.
 
-The shared procedure — report-only shape, diff-bounded reach, the four-step workflow, and the
-generic "what this does not do" — lives in [../../facet-contract.md](../../facet-contract.md); the
-hard stops in [../../hard-stops.md](../../hard-stops.md). Its reach is the diff plus already-imported
+The shared procedure — report-only shape, diff-bounded reach, the per-facet procedure, and the
+generic "what this does not do" — lives in [../../reviewer-brief.md](../../reviewer-brief.md), with the hard stops. Its reach is the diff plus already-imported
 modules and the reviewer's knowledge of the framework and well-known libraries — no function index.
 
 **Facet-specific boundary:** stack-specific idiom placement/shape — a reinvention whose real angle is

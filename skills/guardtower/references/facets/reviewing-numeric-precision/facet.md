@@ -24,9 +24,8 @@ exactness matters — computing, converting, rounding, casting, or accumulating 
 control flow, a plain counter or index whose magnitude never overflows or converts, config, or docs
 is out of scope.
 
-The shared procedure — report-only shape, diff-bounded reach, the four-step workflow, and the
-generic "what this does not do" — lives in [../../facet-contract.md](../../facet-contract.md); the
-hard stops in [../../hard-stops.md](../../hard-stops.md). When it fires, name the quantity, the
+The shared procedure — report-only shape, diff-bounded reach, the per-facet procedure, and the
+generic "what this does not do" — lives in [../../reviewer-brief.md](../../reviewer-brief.md), with the hard stops. When it fires, name the quantity, the
 operation, and the wrong value it can produce.
 
 **Facet-specific boundaries:**
