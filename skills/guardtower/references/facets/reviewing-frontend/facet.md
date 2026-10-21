@@ -1,7 +1,7 @@
 # Reviewing — Frontend facet
 
 Reviews a change that renders a user-facing surface across three lenses that share one relevance gate
-and run as one dispatched reviewer. A change touches one, two, or all three; apply each whose concern
+and are worked together as one facet. A change touches one, two, or all three; apply each whose concern
 the diff-visible surface raises. Each lens has its own checklist, and the cap spans all three.
 
 - **Accessibility lens** — perceivability & operability. Work
@@ -36,10 +36,6 @@ internal logs, developer-only CLI diagnostics, test fixtures, or docs is out of 
 It reasons **statically** about the markup and strings in front of it — it runs no axe-core, browser,
 i18n-lint, extractor, or catalog-diff tool, and does not crawl the UI, the data model, or the message
 catalogs.
-
-The shared procedure — report-only shape, diff-bounded reach, the four-step workflow, and the
-generic "what this does not do" — lives in [../../facet-contract.md](../../facet-contract.md); the
-hard stops in [../../hard-stops.md](../../hard-stops.md).
 
 **Facet-specific boundaries:**
 - It does not **review wording quality** — clarity, tone, grammar, and typos in the source copy are a

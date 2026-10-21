@@ -6,7 +6,7 @@ ablation) so every number says what guardtower *adds* over plain Claude.
 
 ## The cases
 
-Twenty cases in three groups.
+Twenty-one cases in three groups.
 
 **Recall** — a planted defect the review must name:
 
@@ -21,6 +21,7 @@ Twenty cases in three groups.
 | `cr-idempotency-retry` | Catches a payment charge retried with no idempotency key (Python). |
 | `cr-numeric-precision-money` | Catches money handled as floating point (Python). |
 | `cr-tenant-isolation-leak` | Catches a query in a multi-tenant repo that dropped its `tenant_id` scope. |
+| `cr-late-facet-big-diff` | On a multi-file change above the inline threshold, dispatches exactly one reviewer agent and still catches an N+1 planted in a late facet (technical) (Python). |
 
 **Controls** — no false positives:
 
@@ -76,9 +77,54 @@ Each case's `scaffold.sh` builds a tiny git repo unsandboxed (as the author) and
 as `CHANGE.diff`; the agent reviews by reading `CHANGE.diff` + `src/`, needing no Bash/git of its
 own.
 
+## Single-reviewer baseline
+
+0.5.0 replaced the per-facet subagent fan-out with one checklist reviewer. Measured on 2026-10-16
+with `--ablation none`, 3 runs per case, opus-5-5 (score = mean of runs; `$/run` = mean session
+cost, since `claude plugin eval` reports cost, not tokens):
+
+| Case | 0.4.0 score | 0.5.0 score | 0.4.0 $/run | 0.5.0 $/run |
+|---|---|---|---|---|
+| `cr-adversarial-report-only` | 1.00 | 1.00 | 0.46 | 0.27 |
+| `cr-auto-facet-selection` | 1.00 | 1.00 | 1.86 | 1.07 |
+| `cr-clean-control` | 0.75 | 0.75 | 1.73 | 0.77 |
+| `cr-clean-control-ts` | 0.50 | 0.50 | 0.74 | 0.57 |
+| `cr-concurrency-race` | 1.00 | 1.00 | 0.75 | 0.76 |
+| `cr-correctness-subtle` | 1.00 | 1.00 | 0.47 | 0.44 |
+| `cr-data-safety-destructive` | 1.00 | 1.00 | 0.61 | 0.54 |
+| `cr-efficiency-nplus1` | 1.00 | 1.00 | 0.41 | 0.58 |
+| `cr-effort-ask` | 1.00 | 1.00 | 0.61 | 0.83 |
+| `cr-effort-cap` | 0.73 | 0.60 | 0.37 | 0.47 |
+| `cr-handoff-default` | 0.50 | 0.50 | 0.51 | 0.60 |
+| `cr-handoff-format` | 0.67 | 0.67 | 0.65 | 0.64 |
+| `cr-idempotency-retry` | 1.00 | 1.00 | 0.78 | 0.52 |
+| `cr-late-facet-big-diff` | — | 0.80 | — | 1.20 |
+| `cr-menu-tenant-proposal` | 0.83 | 1.00 | 0.58 | 0.59 |
+| `cr-numeric-precision-money` | 1.00 | 1.00 | 0.43 | 0.64 |
+| `cr-relevance-skip` | 1.00 | 1.00 | 0.40 | 0.43 |
+| `cr-reuse-reinvent` | 1.00 | 1.00 | 0.68 | 0.61 |
+| `cr-run-artifacts-dir` | 0.50 | 0.50 | 0.65 | 0.56 |
+| `cr-security-sqli` | 1.00 | 1.00 | 0.56 | 0.61 |
+| `cr-tenant-isolation-leak` | 1.00 | 1.00 | 0.57 | 0.78 |
+
+Paired total over the 20 shared cases (mean $/run): **$13.81 → $12.28** (11% cheaper).
+
+How to read this:
+
+- No case regressed by a full run (0.34). `cr-effort-cap` moved 0.73 → 0.60 because `respects-cap`
+  passed 1/3 runs on 0.4.0 and 0/3 on 0.5.0.
+- Most cases sit under the inline threshold (~1 file, ≤20 lines), where 0.4.0 already ran without
+  subagents, so their cost barely moves. The saving shows on the changes that used to fan out:
+  `cr-auto-facet-selection` −42%, `cr-clean-control` −55%, `cr-adversarial-report-only` −41%.
+- These runs grant no `Write`, so guardtower cannot save `report.md` and the run-dir/report-format
+  graders cannot pass in either version.
+
 ## Running
 
 ```bash
-claude plugin eval evals/cr-security-sqli      # one case
-claude plugin eval evals/                       # the whole suite
+claude plugin eval . --scaffold --allow-tools Write --case cr-security-sqli   # one case
+claude plugin eval . --scaffold --allow-tools Write                          # the whole suite
 ```
+
+Grant `Write`: without it guardtower cannot save `report.md`, so the run-dir and report-format
+graders cannot pass.

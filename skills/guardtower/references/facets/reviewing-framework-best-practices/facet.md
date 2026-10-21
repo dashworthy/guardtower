@@ -40,10 +40,6 @@ listed stack's detection signal? No match on any row: short-circuit and return
 `relevance: { skipped: <reason> }`, having read only the table. For each matched stack, read its
 reference file and work its classes of defect against the diff.
 
-The rest of the shared procedure — report-only shape, diff-bounded reach, and floor/cap/tally —
-lives in [../../facet-contract.md](../../facet-contract.md); the hard stops in
-[../../hard-stops.md](../../hard-stops.md).
-
 **Facet-specific boundaries:**
 - A reinvention of an existing framework capability with no stack-specific placement/shape angle
   belongs to the **Technical** facet's reuse lens; a generic inefficiency with nothing stack-specific

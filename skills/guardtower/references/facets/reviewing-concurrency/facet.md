@@ -23,9 +23,7 @@ concurrent or async handler, a background job or message consumer, or a locking/
 primitive. A purely sequential, single-owner change (a pure computation, request-local state, config,
 docs) is out of scope.
 
-The shared procedure — report-only shape, diff-bounded reach, the four-step workflow, and the
-generic "what this does not do" — lives in [../../facet-contract.md](../../facet-contract.md); the
-hard stops in [../../hard-stops.md](../../hard-stops.md). When it fires, name the two executions and
+When it fires, name the two executions and
 the state they corrupt, so the interleaving is legible without rerunning the reasoning.
 
 **Facet-specific boundaries:**

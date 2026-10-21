@@ -1,6 +1,6 @@
 ---
 name: guardtower
-description: "Run an in-depth, opt-in code review of a change through specialized facets (security, and more) that guardtower selects from what the change does, fanned out as self-limiting reviewers, then reconcile their findings into one markdown report. Use when asked for a deep code review of a diff, branch, or PR, or a security review, before merging a higher-risk change. Accepts an optional effort level (low/medium/high/max) and an optional target (a PR/MR link or number, branch, diff, or path)."
+description: "Run an in-depth, opt-in code review of a change through specialized facets (security, and more) that guardtower selects from what the change does, worked as a checklist by one self-limiting reviewer, then reconcile its findings into one markdown report. Use when asked for a deep code review of a diff, branch, or PR, or a security review, before merging a higher-risk change. Accepts an optional effort level (low/medium/high/max) and an optional target (a PR/MR link or number, branch, diff, or path)."
 ---
 
 # guardtower (review orchestrator)
@@ -8,8 +8,9 @@ description: "Run an in-depth, opt-in code review of a change through specialize
 ## What this guarantees
 
 Given a change — a diff, a branch, a PR, whatever the caller points at — this skill
-decides which review facets the change warrants, dispatches each selected facet as an independent
-reviewer, and reconciles what they return into a single self-contained markdown report, written into
+decides which review facets the change warrants, has one reviewer work every selected facet as a
+checklist over a single read of the change, and reconciles what it returns into a single
+self-contained markdown report, written into
 the run's own directory (see **Run artifacts**). It is
 **report-only**: it states what each facet found and never edits the code.
 
@@ -31,7 +32,7 @@ runs with none.
 
 - **effort** — `low` | `medium` | `high` | `max`. One dial that sets the `caps`
   the orchestrator hands every facet (`top_n`, `floor` — see
-  [references/facet-contract.md](references/facet-contract.md)), trading breadth for signal in one
+  [references/reviewer-brief.md](references/reviewer-brief.md)), trading breadth for signal in one
   place rather than per facet. Lower effort returns fewer, higher-confidence findings; higher effort
   widens coverage and admits less-certain ones:
 
@@ -61,8 +62,8 @@ ask once rather than guess.
 ## The facets
 
 Fourteen facets exist; each is one lens, defined in a reference file under
-[references/facets/](references/facets/) (`references/facets/<facet>/facet.md`), and dispatched as
-an independent reviewer — not a standalone skill. Eight **core** facets are marked **Always** in
+[references/facets/](references/facets/) (`references/facets/<facet>/facet.md`), and worked as one
+item of the reviewer's checklist — not a standalone skill. Eight **core** facets are marked **Always** in
 the facet list below; the rest are opt-in or **core-when-present**, per the **Select when the
 change…** column of that list.
 
@@ -136,7 +137,7 @@ facet list's **Select when the change…** column — the human is not asked to 
      the change;
    - each **opt-in** facet whose list entry matches the change's character is selected, erring
      toward inclusion — a false skip (a lens left off) is the harmful direction, while a
-     false-positive self-skips cheaply at dispatch;
+     false-positive self-skips cheaply when the reviewer reaches it;
    - each **core-when-present** facet (`reviewing-tenant-isolation` and
      `reviewing-framework-best-practices`) is selected when the step-3 proposal gate proposed it —
      the proposal is its list entry, so it is *not* further gated on the change's character.
@@ -147,37 +148,43 @@ facet list's **Select when the change…** column — the human is not asked to 
    these?" prompt. Announce the selection in one line (each selected facet, and for each opt-in or
    core-when-present facet the phrase from the change that selected it) and proceed straight to
    dispatch; the same selection, with its reasons and the facets left out, goes into the report. The
-   list only selects — each facet's own per-change relevance gate **stays authoritative** at
-   dispatch, so a selected facet the change never touches self-skips there rather than producing a
-   hollow review. The orchestrator opens no facet's own doc to select; a facet's file is read only
-   when it is dispatched (step 6).
-5. **Decide fan-out vs. inline.** On a small change — roughly one file, ~20 changed lines or fewer,
-   one hunk — reviewing every selected facet inline costs less than spinning up subagents; do it
-   inline. Above that floor, **fan out** the selected facets in parallel: dispatch each as an
-   independent agent that shares only a *read* of `change_ref` — no facet reads what another
-   produces, so the reviewers stay fully independent. Mark each facet's todo `in_progress` as it
-   goes out, or as you begin it inline.
-6. **Hand each facet the contract.** Each selected facet is defined by its file
-   `references/facets/<facet>/facet.md`, relative to **this skill's own directory**. Before
-   dispatching a reviewer, resolve that to an **absolute** path — prefix it with the plugin root your
-   runtime exposes (`${CLAUDE_PLUGIN_ROOT}` under Claude Code) or, failing that, this skill's own
-   directory — and hand the reviewer that absolute path to read and apply, so a cold subagent, which
-   boots in a directory it was never told, can resolve it; the facet's own
-   `references/*.md` and `../../*` citations then resolve relative to that file's own directory. Pass
-   every facet the same request and expect the same result shape — see
-   [references/facet-contract.md](references/facet-contract.md). Set the request's `caps` (`top_n`,
-   `floor`) from the **effort** settled in step 2 per the table in **Arguments** — the same caps to
-   every facet, so the discipline is tuned in one place. Each facet enforces the hard stops
-   itself, at the source — see [references/hard-stops.md](references/hard-stops.md); the
-   orchestrator does not trim findings afterward. A reviewer returns its result to the orchestrator;
-   it writes no file of its own outside the run directory.
-7. **Reconcile.** Gather all results — nothing dropped because it returned last, nothing picked
-   because it returned first; mark each facet's todo `completed` as its result lands. Deduplicate
-   where two facets flag the same location, order the findings, and hold them for the single report.
-   Reconciliation is the one thing a facet does not own; it needs
-   every result at once. Carry each facet's `dropped` count through into the report: where any facet
-   hit its cap, the report states how many genuine findings wait behind it (e.g. "Security: 3 more
-   above the floor — re-run to see them"). The cap keeps the report short; it does not get to make
+   list only selects — each facet's own per-change relevance gate **stays authoritative** when
+   the reviewer reaches it, so a selected facet the change never touches self-skips there rather
+   than producing a hollow review. The orchestrator opens no facet's own doc to select; a facet's file is read only
+   when the reviewer reaches it (step 6).
+5. **Inline or one reviewer.** On a small change — roughly one file, ~20 changed lines or fewer,
+   one hunk — work the reviewer brief's procedure yourself, inline. Above that floor, dispatch
+   **exactly one** reviewer agent for every selected facet — never one agent per facet. One read
+   of the change, worked facet by facet, is what keeps a run's cost flat as the facet count grows.
+   Mark every facet's todo `in_progress` as the reviewer goes out, or one at a time as you reach
+   each facet inline.
+6. **Hand the reviewer the brief.** The reviewer follows
+   [references/reviewer-brief.md](references/reviewer-brief.md): the request, the per-facet
+   procedure, the hard stops, and the result shape. Resolve the brief and each selected facet's
+   `references/facets/<facet>/facet.md` (relative to **this skill's own directory**) to
+   **absolute** paths — prefix them with the plugin root your runtime exposes
+   (`${CLAUDE_PLUGIN_ROOT}` under Claude Code) or, failing that, this skill's own directory — so a
+   cold subagent, which boots in a directory it was never told, can open them; each facet's own
+   `references/*.md` and `../../*` citations resolve relative to that file. List the facets in
+   this fixed order, keeping only those selected — recall-critical lenses first, while attention
+   is freshest:
+
+   `security`, `tenant-isolation`, `data-safety`, `concurrency`, `idempotency`,
+   `numeric-precision`, `technical`, `api`, `error-handling`, `framework-best-practices`,
+   `frontend`, `test-quality`, `architectural`, `readability`
+
+   Set `caps` (`top_n`, `floor`) from the **effort** settled in step 2 per the table in
+   **Arguments**; they apply to each facet separately. Pass the step-3 tenancy verdict as
+   `tenancy` (an `ambiguous` verdict is passed as the human's answer to the step-3 question). The
+   reviewer enforces the hard stops itself, per facet, at the source; the orchestrator does not
+   trim findings afterward. The reviewer returns its result to the orchestrator and writes no file.
+7. **Reconcile.** Take the reviewer's `results` — one entry per facet, skipped ones included — and
+   mark every facet's todo `completed`. The reviewer files each finding under one owning facet;
+   still merge two findings only when they name the same defect at the same location, then order
+   the findings and hold them for the single report. Carry each facet's `dropped` count through
+   into the report: where any facet hit its cap, the report states how many genuine findings wait
+   behind it (e.g. "Security: 3 more above the floor — re-run to see them"). The cap keeps the
+   report short; it does not get to make
    the report *look* complete when it isn't. A reader deciding whether to re-run needs to know work
    was held back, not discover it by accident.
 8. **Write the report — always from the handoff template.** The reconciled findings are the whole
@@ -196,7 +203,9 @@ facet list's **Select when the change…** column — the human is not asked to 
    described in the report for them to apply, not applied. The report is the last file this turn
    writes. Write it whole, in one file-write call; to revise it, rewrite the whole file the same
    way rather than patching it with an edit tool, so any edit-tool call in a guardtower run is
-   unambiguously a code edit — which report-only forbids. The report never leaves the machine on
+   unambiguously a code edit — which report-only forbids. If the runtime gives you no file-write
+   tool, put the whole report in the reply and say it could not be saved — never hand the write
+   to a subagent; a withheld tool stays withheld. The report never leaves the machine on
    its own: posting it onward, or acting on it, is the human's to do; guardtower is report-only and
    stops at the written report (a "proposed fix" is described, never applied).
 
@@ -226,28 +235,25 @@ edits `.gitignore` — whether `.guardtower/` is committed is the human's call.
 
 ## Track each facet as a todo
 
-The fan-out is legible to the human only if they can see what was dispatched and what has come
-back. The moment the facet set is fixed (after step 4), seed a todo list from it — **one todo per
-selected facet, each seam its own item** — in whatever todo list your harness provides. A facet the
-selection lists but that is not yet available never runs and never becomes a todo (the report
-lists it as skipped, not failed); a facet that will self-skip on its
-own relevance gate still gets one, and closes when it returns "nothing to review."
+The human sees what ran only if each facet is visible. The moment the facet set is fixed (after
+step 4), seed a todo list from it — **one todo per selected facet** — in whatever todo list your
+harness provides. A facet the selection lists but that is not yet available never runs and never
+becomes a todo (the report lists it as skipped, not failed); a facet that will self-skip on its
+own relevance gate still gets one, and closes when its result says skipped.
 
-Keep the list in lockstep with the dispatch:
+- **`in_progress` when the reviewer is dispatched** — every facet at once, since one reviewer
+  carries them all (step 5); inline, one at a time as you reach each.
+- **`completed` when the reviewer's result is in hand** (step 7), self-skips included — so a
+  facet that finished with nothing reads as done, never as still running.
 
-- **`in_progress` as the facet is dispatched** — in fan-out that is several at once, one per
-  reviewer in flight (step 5); inline it is one at a time as you work down the set.
-- **`completed` the instant its result is in hand** (step 7), a
-  self-skip included — so a facet that finished with nothing reads as done, never as still running.
-
-Reconciliation is not a facet and takes no todo of its own; it is the step that consumes every
-completed item at once.
+Reconciliation is not a facet and takes no todo of its own.
 
 ## Governing principle
 
 Keep the self-enforcement shape (workflow step 6) when changing a facet boundary or adding a facet:
-a cap the orchestrator applies after a facet has already done unbounded work saves output, not the
-work.
+the reviewer runs each facet's gate before opening its checklist and applies its cap before moving
+on. A cap applied after unbounded work saves output, not the work. And keep one reviewer: a new
+facet is a new checklist item and a new place in the step-6 order, not a new agent.
 
 ## What this does not do
 

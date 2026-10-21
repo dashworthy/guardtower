@@ -26,10 +26,6 @@ format), **or** it **consumes a remote/HTTP API it does not own** (a `fetch`/`ax
 a request hook, a polling loop, or a request builder). Internal/private code only, pure local
 computation, a data-layer/DB query, config, or docs is out of scope.
 
-The shared procedure — report-only shape, diff-bounded reach, the four-step workflow, and the
-generic "what this does not do" — lives in [../../facet-contract.md](../../facet-contract.md); the
-hard stops in [../../hard-stops.md](../../hard-stops.md).
-
 **Facet-specific boundaries:**
 - Data-layer / database access — N+1 on an ORM, unbounded SQL, a query in a loop — belongs to the
   **Technical** facet. The boundary is transport: Technical owns the data layer, the consumption lens

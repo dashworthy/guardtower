@@ -5,8 +5,9 @@
 Standalone, in-depth, **opt-in** code review for Claude Code.
 
 Point it at a change — a diff, a branch, or a PR — and it decides which review **facets** the
-change warrants (security, concurrency, data-safety, API compatibility, and more), dispatches each
-as an independent, self-limiting reviewer, and reconciles everything into **one markdown report**. It is
+change warrants (security, concurrency, data-safety, API compatibility, and more), has one
+self-limiting reviewer work them as a checklist over a single read of the change, and reconciles
+everything into **one markdown report**. It is
 **report-only**: it tells you what each facet found and never edits your code.
 
 This is the heavier, deliberate review — not an everyday pass and not an automatic gate. Someone

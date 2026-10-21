@@ -1,7 +1,7 @@
 # Reviewing — Technical facet
 
 Reviews the change for technical defects across two lenses that share one reach and one relevance
-gate and run as a single dispatched reviewer. The cap spans both lenses.
+gate and are worked together as one facet. The cap spans both lenses.
 
 - **Efficiency & correctness lens.** Work
   [references/technical-checklist.md](references/technical-checklist.md): inefficient data access —
@@ -23,9 +23,7 @@ functions, data-access code, loops over collections, comparison/date/string hand
 computation, hand-rolled utilities, or framework wiring that could duplicate an existing capability. A
 pure config, docs, or formatting change, or a trivial constant edit, is out of scope.
 
-The shared procedure — report-only shape, diff-bounded reach, the four-step workflow, and the
-generic "what this does not do" — lives in [../../facet-contract.md](../../facet-contract.md); the
-hard stops in [../../hard-stops.md](../../hard-stops.md). Its reach is the diff plus already-imported
+Its reach is the diff plus already-imported
 modules and the reviewer's knowledge of the framework and well-known libraries — no function index.
 
 **Facet-specific boundary:** stack-specific idiom placement/shape — a reinvention whose real angle is

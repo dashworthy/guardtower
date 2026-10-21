@@ -21,10 +21,6 @@ readability surface and is out of scope.
 Readability is more subjective than a correctness lens, so **hold the floor hard**: a finding must
 name the specific cost and the simpler shape it points to, not merely a stylistic preference.
 
-The shared procedure — report-only shape, diff-bounded reach, the four-step workflow, and the
-generic "what this does not do" — lives in [../../facet-contract.md](../../facet-contract.md); the
-hard stops in [../../hard-stops.md](../../hard-stops.md).
-
 **Facet-specific boundaries:**
 - Earned complexity is not a finding — an abstraction with real reuse or that genuinely simplifies the
   change's tests, and defense at a real trust boundary (external, untrusted, or network input), are
