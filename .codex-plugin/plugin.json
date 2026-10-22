@@ -1,6 +1,6 @@
 {
   "name": "guardtower",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Standalone, in-depth, opt-in code review: guardtower picks the specialized facets (security, concurrency, data-safety, and more) a change warrants, works them as a checklist through one self-limiting reviewer, and reconciles its findings into one markdown report. Report-only — never edits code.",
   "author": {
     "name": "Andrew Leach",

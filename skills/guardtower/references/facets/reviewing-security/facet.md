@@ -24,4 +24,6 @@ data. A pure docs/comment/formatting change, or a test-fixtures-only change, is 
 
 **Facet-specific boundary:** the *non-security* Electron idiom (heavy work on the main process, a
 wrong-side-of-the-split responsibility, lifecycle/packaging hygiene) belongs to the **Framework Best
-Practices** facet's Electron stack, not this facet.
+Practices** facet's Electron stack, not this facet. A defect whose Laravel mechanism *is* the
+finding (`$guarded = []`, `{!! !!}` on user input, a CSRF exception) belongs to the **Laravel
+Security** facet.

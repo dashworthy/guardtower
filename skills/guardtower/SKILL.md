@@ -61,7 +61,7 @@ ask once rather than guess.
 
 ## The facets
 
-Fourteen facets exist; each is one lens, defined in a reference file under
+Fifteen facets exist; each is one lens, defined in a reference file under
 [references/facets/](references/facets/) (`references/facets/<facet>/facet.md`), and worked as one
 item of the reviewer's checklist — not a standalone skill. Eight **core** facets are marked **Always** in
 the facet list below; the rest are opt-in or **core-when-present**, per the **Select when the
@@ -73,6 +73,7 @@ facet list's **Select when the change…** column — the human is not asked to 
 | Facet (file) | Lens | Select when the change… |
 |---|---|---|
 | [`reviewing-security`](references/facets/reviewing-security/facet.md) | OWASP best practices; authorization enforced, not assumed; plus Electron process-model security (renderer isolation, preload/IPC, navigation, shell/protocol) when the change touches an Electron surface | **Always** (core) |
+| [`reviewing-laravel-security`](references/facets/reviewing-laravel-security/facet.md) | Laravel-specific security: production config, Sanctum/Passport, Gates/Policies, mass assignment, raw queries, CSRF, Blade XSS, uploads, rate limiting, secrets | When **step 3 proposed it** (Laravel in the stack verdict) — on the proposal |
 | [`reviewing-technical`](references/facets/reviewing-technical/facet.md) | Two lenses — Efficiency & correctness (N+1, unbounded queries, correctness-scoped best practice) and Reuse over reinvention (rebuilding what a framework/stdlib/library/imported module already provides) | **Always** (core) |
 | [`reviewing-architectural`](references/facets/reviewing-architectural/facet.md) | Sustainable architecture: coupling, dependency direction, cohesion, leaky abstractions | **Always** (core) |
 | [`reviewing-readability`](references/facets/reviewing-readability/facet.md) | Human readability across two lenses — Unearned abstraction (single-use indirection, premature generalization, speculative flexibility) and Over-defensive programming (guards for conditions the code's own invariants rule out) | **Always** (core) |
@@ -125,8 +126,9 @@ facet list's **Select when the change…** column — the human is not asked to 
    than one at once. The tenancy verdict governs whether the single `reviewing-tenant-isolation`
    facet is proposed and which lens it applies: `shared` → proposed, shared-DB lens; `per-db` →
    proposed, isolated-DB lens; `both` → proposed, both lenses; `none` → not proposed. The stack
-   verdict governs only whether `reviewing-framework-best-practices` is proposed: any non-empty set →
-   proposed; an empty set → not proposed. This is the upper of guardtower's **two-gate** model: a
+   verdict governs whether `reviewing-framework-best-practices` is proposed — any non-empty set →
+   proposed; an empty set → not proposed — and whether `reviewing-laravel-security` is: Laravel in
+   the set → proposed. This is the upper of guardtower's **two-gate** model: a
    repo-level proposal gate that sits *above* each facet's own per-change relevance gate — a
    proposed facet still self-skips on a change that touches no tenant-scoped or stack-relevant
    surface, so proposing is not running.
@@ -138,8 +140,8 @@ facet list's **Select when the change…** column — the human is not asked to 
    - each **opt-in** facet whose list entry matches the change's character is selected, erring
      toward inclusion — a false skip (a lens left off) is the harmful direction, while a
      false-positive self-skips cheaply when the reviewer reaches it;
-   - each **core-when-present** facet (`reviewing-tenant-isolation` and
-     `reviewing-framework-best-practices`) is selected when the step-3 proposal gate proposed it —
+   - each **core-when-present** facet (`reviewing-tenant-isolation`,
+     `reviewing-framework-best-practices`, and `reviewing-laravel-security`) is selected when the step-3 proposal gate proposed it —
      the proposal is its list entry, so it is *not* further gated on the change's character.
 
    When no opt-in entry clearly matches, or the change cannot be read, select the core facets plus
@@ -169,7 +171,7 @@ facet list's **Select when the change…** column — the human is not asked to 
    this fixed order, keeping only those selected — recall-critical lenses first, while attention
    is freshest:
 
-   `security`, `tenant-isolation`, `data-safety`, `concurrency`, `idempotency`,
+   `security`, `laravel-security`, `tenant-isolation`, `data-safety`, `concurrency`, `idempotency`,
    `numeric-precision`, `technical`, `api`, `error-handling`, `framework-best-practices`,
    `frontend`, `test-quality`, `architectural`, `readability`
 

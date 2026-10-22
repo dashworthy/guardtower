@@ -89,13 +89,14 @@ facet's cap held findings back, the report says how many wait behind it so you k
 
 ## The facets
 
-Fourteen lenses, each defined under `skills/guardtower/references/facets/<facet>/facet.md`. Eight
+Fifteen lenses, each defined under `skills/guardtower/references/facets/<facet>/facet.md`. Eight
 **core** facets run on every change; the rest are selected automatically only when the change — or the repo's
 detected stack/tenancy — makes them relevant.
 
 | Facet | What it checks | Runs |
 |---|---|---|
 | `reviewing-security` | OWASP best practices; authorization enforced, not assumed; Electron process-model security when relevant | Always (core) |
+| `reviewing-laravel-security` | Laravel-specific security: config, Sanctum/Passport, Gates/Policies, mass assignment, CSRF, Blade XSS, uploads | When Laravel is detected |
 | `reviewing-technical` | Efficiency & correctness (N+1, unbounded queries) and reuse over reinvention | Always (core) |
 | `reviewing-architectural` | Coupling, dependency direction, cohesion, leaky abstractions | Always (core) |
 | `reviewing-readability` | Unearned abstraction and over-defensive programming | Always (core) |
